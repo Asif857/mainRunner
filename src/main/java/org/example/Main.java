@@ -40,29 +40,29 @@ public class Main {
         HadoopJarStepConfig hadoopJarStepFirstMapReduce = new HadoopJarStepConfig()
                 .withJar("s3://second-amazon-project/jars/FirstMapReduce.jar") // This should be a full map reduce application.
                 .withMainClass("Main") //contains the main class in the jar.
-                .withArgs("s3://second-amazon-project/input/input", "s3://second-amazon-project/output/output");
+                .withArgs("s3://datasets.elasticmapreduce/ngrams/books/20090715/eng-us-all/3gram/data", "s3://second-amazon-project/output/output");
         StepConfig stepConfigFirst = new StepConfig()
-                .withName("step1")
+                .withName("EMR1")
                 .withHadoopJarStep(hadoopJarStepFirstMapReduce)
                 .withActionOnFailure("TERMINATE_JOB_FLOW");
-     /*   HadoopJarStepConfig hadoopJarStepSecondMapReduce = new HadoopJarStepConfig()
-                .withJar("s3n://yourbucket/yourfile.jar") // This should be a full map reduce application.
+        HadoopJarStepConfig hadoopJarStepSecondMapReduce = new HadoopJarStepConfig()
+                .withJar("s3://second-amazon-project/jars/SecondMapReduce.jar") // This should be a full map reduce application.
                 .withMainClass("Main") //contains the main class in the jar.
-                .withArgs("s3n://yourbucket/input/", "s3n://yourbucket/output/");
+                .withArgs("s3://second-amazon-project/output/output", "s3://second-amazon-project/output/output2");
         StepConfig stepConfigSecond = new StepConfig()
-                .withName("stepname")
+                .withName("EMR2")
                 .withHadoopJarStep(hadoopJarStepSecondMapReduce)
                 .withActionOnFailure("TERMINATE_JOB_FLOW");
         HadoopJarStepConfig hadoopJarStepThirdMapReduce = new HadoopJarStepConfig()
-                .withJar("s3n://yourbucket/yourfile.jar") // This should be a full map reduce application.
+                .withJar("s3://second-amazon-project/jars/ThirdMapReduce.jar") // This should be a full map reduce application.
                 .withMainClass("Main") //contains the main class in the jar.
-                .withArgs("s3n://yourbucket/input/", "s3n://yourbucket/output/");
+                .withArgs("s3://second-amazon-project/output/output2", "s3://second-amazon-project/output/output3");
         StepConfig stepConfigThird = new StepConfig()
-                .withName("stepname")
+                .withName("EMR3")
                 .withHadoopJarStep(hadoopJarStepThirdMapReduce)
-                .withActionOnFailure("TERMINATE_JOB_FLOW"); */
+                .withActionOnFailure("TERMINATE_JOB_FLOW");
         JobFlowInstancesConfig instances = new JobFlowInstancesConfig()
-                .withInstanceCount(2)
+                .withInstanceCount(5)
                 .withHadoopVersion("3.3.2")
                 .withMasterInstanceType(InstanceType.M4Large.toString())
                 .withSlaveInstanceType(InstanceType.M4Large.toString())
@@ -73,7 +73,7 @@ public class Main {
                 .withName("tryjob")
                 .withInstances(instances)
                 .withReleaseLabel("emr-5.30.1")
-                .withSteps(stepConfigFirst) // stepConfigSecond,stepConfigThird
+                .withSteps(stepConfigFirst,stepConfigSecond,stepConfigThird) // stepConfigSecond,stepConfigThird
                 .withLogUri("s3://second-amazon-project/logs/logs");
         runFlowRequest.setServiceRole("EMR_DefaultRole");
         runFlowRequest.setJobFlowRole("EMR_EC2_DefaultRole");
