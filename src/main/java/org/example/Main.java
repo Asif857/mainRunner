@@ -40,7 +40,7 @@ public class Main {
         HadoopJarStepConfig hadoopJarStepFirstMapReduce = new HadoopJarStepConfig()
                 .withJar("s3://second-amazon-project/jars/FirstMapReduce.jar") // This should be a full map reduce application.
                 .withMainClass("Main") //contains the main class in the jar.
-                .withArgs("s3://datasets.elasticmapreduce/ngrams/books/20090715/eng-us-all/3gram/data", "s3://second-amazon-project/output/output");
+                .withArgs("s3://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/3gram/data", "s3://second-amazon-project/output/output");
         StepConfig stepConfigFirst = new StepConfig()
                 .withName("EMR1")
                 .withHadoopJarStep(hadoopJarStepFirstMapReduce)
@@ -54,7 +54,7 @@ public class Main {
                 .withHadoopJarStep(hadoopJarStepSecondMapReduce)
                 .withActionOnFailure("TERMINATE_JOB_FLOW");
         HadoopJarStepConfig hadoopJarStepThirdMapReduce = new HadoopJarStepConfig()
-                .withJar("s3://second-amazon-project/jars/ThirdMapReduce.jar") // This should be a full map reduce application.
+                .withJar("s3://second-amazon-project/jars/FourthMapReduce.jar") // This should be a full map reduce application.
                 .withMainClass("Main") //contains the main class in the jar.
                 .withArgs("s3://second-amazon-project/output/output2", "s3://second-amazon-project/output/output3");
         StepConfig stepConfigThird = new StepConfig()
@@ -62,7 +62,7 @@ public class Main {
                 .withHadoopJarStep(hadoopJarStepThirdMapReduce)
                 .withActionOnFailure("TERMINATE_JOB_FLOW");
         JobFlowInstancesConfig instances = new JobFlowInstancesConfig()
-                .withInstanceCount(5)
+                .withInstanceCount(8)
                 .withHadoopVersion("3.3.2")
                 .withMasterInstanceType(InstanceType.M4Large.toString())
                 .withSlaveInstanceType(InstanceType.M4Large.toString())
